@@ -6,18 +6,27 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const app = express();
-
 const allowedOrigins = [
   process.env.CLIENT_URL,
   process.env.ADMIN_URL,
-  "https://shop-co-website-vg69.vercel.app",
+  "https://shop-co-website-izht.vercel.app",
   "https://e-commerce-deshboard-one.vercel.app",
+  "http://localhost:5173",
+  "http://localhost:3000",
 ].filter(Boolean);
+
+const isAllowedReactPreview = (origin) => {
+  return /^https:\/\/shop-co-website-vg69(?:-[a-z0-9-]+)?-asharibkhans-projects\.vercel\.app$/i.test(origin);
+};
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (
+        !origin ||
+        allowedOrigins.includes(origin) ||
+        isAllowedReactPreview(origin)
+      ) {
         return callback(null, true);
       }
 
